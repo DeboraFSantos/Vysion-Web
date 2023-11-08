@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title>Fire</title>
+</head>
+
+<body>
+    <button onclick="login()">LOGIN COM GOOGLE</button>
+
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBnFce5EXwOiLIXNCB9_uMlBAc3z6Pcsxs",
+            authDomain: "vysion-917ff.firebaseapp.com",
+            projectId: "vysion-917ff",
+            storageBucket: "vysion-917ff.appspot.com",
+            messagingSenderId: "506413084503",
+            appId: "1:506413084503:web:5667b2e39652f91e7ad812",
+            measurementId: "G-28WZLW0CR0"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        function login() {
+            firebase.auth().signInWithPopup(provider).then(function (result) {
+                // ESTE NÃO É O JWT, É O TOKEN PARA OBTER INFOS DO GOOGLE
+                var token = result.credential.accessToken;
+                var user = result.user;
+                console.log(user)
+                firebase.auth()
+                    .currentUser
+                    .getIdToken()
+                    .then((idToken) => {
+                        // ESTE É O TOKEN JWT QUE VAMOS MANDAR PARA API
+                        console.log(idToken.toString());
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+            }).catch(function (error) {
+                // DEU RUIM
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

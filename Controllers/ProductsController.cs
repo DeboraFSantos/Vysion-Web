@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Vysion.Dtos;
@@ -13,14 +14,15 @@ namespace Vysion.Controllers
     [Route("products")]
     public class ProductsController : ControllerBase
     {   
-        private readonly IItemsRepository repository;
+        private readonly IProductsRepository repository;
 
-        public ProductsController(IItemsRepository repository)
+        public ProductsController(IProductsRepository repository)
         {
             this.repository = repository;
         }
 
         [HttpGet]
+        [Authorize]
         public IEnumerable<ProductDto> GetProducts()
         {
             var products = repository.GetProducts().Select(product => product.AsDto());
