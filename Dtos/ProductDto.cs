@@ -1,4 +1,5 @@
 using System;
+using Vysion.Entities;
 
 namespace Vysion.Dtos
 {
@@ -7,7 +8,7 @@ namespace Vysion.Dtos
         public Guid Id { get; init; }
         public string Name { get; init; }
         public string Description { get; init; }
-        public string Category { get; init; }
+        public Guid CategoryId { get; set; }
         public string SKU { get; init; }
         public int StockQuantity { get; init; }
         public decimal Price { get; init; }

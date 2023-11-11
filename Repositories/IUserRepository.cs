@@ -10,8 +10,8 @@ namespace Vysion.Repositories
         User GetUser(Guid id);
         IEnumerable<User> GetUsers();
 
-        void CreateUser(User User);
-        void UpdateUser (User User);
+        void CreateUser(User user);
+        void UpdateUser (User user);
         void DeleteUser (Guid id);
     }
 }

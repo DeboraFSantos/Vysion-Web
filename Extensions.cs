@@ -13,7 +13,7 @@ namespace Vysion
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                Category = product.Category,
+                CategoryId = product.CategoryId,
                 SKU = product.SKU,
                 StockQuantity = product.StockQuantity,
                 IsActive = product.IsActive,
@@ -61,6 +61,76 @@ namespace Vysion
                 Phone = client.Phone,
                 Address = client.Address,
                 CreatedDate = client.CreatedDate
+            };
+        }
+
+        public static SaleDto AsDto(this Sale sale)
+        {
+            return new SaleDto
+            {
+                Id = sale.Id,
+                ClientId = sale.ClientId,
+                SellerId = sale.SellerId,
+                Products = sale.Products,
+                TotalSale = sale.TotalSale,
+                PaymentMethod = sale.PaymentMethod,
+                DeliveryInformation = sale.DeliveryInformation,
+                SaleNotes = sale.SaleNotes,
+                CommissionForSeller = sale.CommissionForSeller,
+                CreatedDate = sale.CreatedDate
+            };
+        }
+
+        public static CreateSaleDto AsCreateDto(this Sale sale)
+        {
+            return new CreateSaleDto
+            {
+                ClientId = sale.ClientId,
+                SellerId = sale.SellerId,
+                Products = sale.Products,
+                PaymentMethod = sale.PaymentMethod,
+                DeliveryInformation = sale.DeliveryInformation,
+                SaleNotes = sale.SaleNotes,
+                CommissionForSeller = sale.CommissionForSeller
+            };
+        }
+
+        public static SaleDetailDto AsDetailDto(this Sale sale)
+        {
+            return new SaleDetailDto
+            {
+                Id = sale.Id,
+                ClientId = sale.ClientId,
+                SellerId = sale.SellerId,
+                TotalSale = sale.TotalSale,
+                PaymentMethod = sale.PaymentMethod,
+                DeliveryInformation = sale.DeliveryInformation,
+                SaleNumber = sale.SaleNumber,
+                SaleNotes = sale.SaleNotes,
+                CommissionForSeller = sale.CommissionForSeller,
+                CreatedDate = sale.CreatedDate,
+                ClientInfo = sale.ClientInfo,
+                SellerInfo = sale.SellerInfo,
+                ProductsInfos = sale.ProductsInfos
+            };
+        }
+
+        public static ProductDetailDto AsProductDetailDto(this Product product)
+        {
+            return new ProductDetailDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                CategoryId = product.CategoryId,
+                SKU = product.SKU,
+                StockQuantity = product.StockQuantity,
+                IsActive = product.IsActive,
+                ImageUrl = product.ImageUrl,
+                Discount = product.Discount,
+                CreatedDate = product.CreatedDate,
+                Category = product.Category
             };
         }
     }

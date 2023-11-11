@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Vysion.Dtos;
 using Vysion.Entities;
+using Vysion.Helpers;
 using Vysion.Repositories;
 
 namespace Vysion.Controllers
@@ -22,25 +24,50 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public IEnumerable<ProductDto> GetProducts()
+        public IActionResult GetProducts([FromQuery] PaginationParams paginationParams)
         {
-            var products = repository.GetProducts().Select(product => product.AsDto());
+            var products = repository.GetProducts();
 
-            return products;
+            var totalItems = products.Count();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
+
+            var pagedProducts = products
+            .Skip((paginationParams.CurrentPage - 1) * paginationParams.PageSize)
+            .Take(paginationParams.PageSize)
+            .Select(product => product.AsProductDetailDto());
+
+            var response = new
+            {
+                Total = totalItems,
+                PageSize = paginationParams.PageSize,
+                CurrentPage = paginationParams.CurrentPage,
+                TotalPages = totalPages,
+                Products = pagedProducts
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductDto> GetProduct(Guid id)
+         public async Task<IActionResult> GetProduct(Guid id)
         {
-            var product = repository.GetProduct(id);
+            var productInfo = await repository.GetProduct(id);
 
-            if(product is null)
+            Product product = new Product
             {
-                return NotFound();
-            }
+                Id = productInfo.Id,
+                Name = productInfo.Name,
+                Description = productInfo.Description,
+                Category = productInfo.Category,
+                SKU = productInfo.SKU,
+                Price = productInfo.Price,
+                IsActive = productInfo.IsActive,
+                ImageUrl = productInfo.ImageUrl,
+                Discount = productInfo.Discount,
+                CreatedDate = productInfo.CreatedDate,
+            };
 
-            return product.AsDto();
+             return Ok(product);
         }
 
         // POST /products
@@ -52,7 +79,7 @@ namespace Vysion.Controllers
                 Id = Guid.NewGuid(),
                 Name = productDto.Name,
                 Description = productDto.Description,
-                Category = productDto.Category,
+                CategoryId = productDto.CategoryId,
                 SKU = productDto.SKU,
                 Price = productDto.Price,
                 IsActive = productDto.IsActive,
@@ -68,18 +95,20 @@ namespace Vysion.Controllers
         
         // PUT /products/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(Guid id, UpdateProductDto productDto)
+        public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductDto productDto)
         {
-            var existingProduct = repository.GetProduct(id);
+            var existingProduct = await repository.GetProduct(id);
 
-            if(existingProduct is null){
+            if (existingProduct is null)
+            {
                 return NotFound();
             }
 
-            Product updatedProduct = existingProduct with {
+            Product updatedProduct = existingProduct with
+            {
                 Name = productDto.Name,
                 Description = productDto.Description,
-                Category = productDto.Category,
+                CategoryId = productDto.CategoryId,
                 SKU = productDto.SKU,
                 Price = productDto.Price,
                 IsActive = productDto.IsActive,

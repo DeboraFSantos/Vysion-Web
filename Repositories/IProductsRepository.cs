@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Vysion.Entities;
 
 namespace Vysion.Repositories
 {
     public interface IProductsRepository
     {
-        Product GetProduct(Guid id);
+        Task<Product> GetProduct(Guid id);
         IEnumerable<Product> GetProducts();
 
         void CreateProduct(Product product);

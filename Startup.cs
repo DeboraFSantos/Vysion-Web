@@ -47,6 +47,7 @@ namespace Vysion
             services.AddSingleton<IUsersRepository, UsersRepository>();
             services.AddSingleton<ICategoriesRepository, CategoriesRepository>();
             services.AddSingleton<IClientsRepository, ClientsRepository>();
+            services.AddSingleton<ISalesRepository, SalesRepository>();
 
             services.AddCors();
             services.AddControllers();

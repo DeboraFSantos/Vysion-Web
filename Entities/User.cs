@@ -11,5 +11,10 @@ namespace Vysion.Entities
         public string Phone { get; set; }
         public string Role { get; set; }
         public DateTimeOffset CreatedDate { get; init; }
+
+        public static implicit operator User(Client v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

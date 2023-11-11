@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Vysion.Dtos;
 using Vysion.Entities;
+using Vysion.Helpers;
 using Vysion.Repositories;
 
 namespace Vysion.Controllers
@@ -22,11 +23,28 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ClientDto> GetClients()
+        public IActionResult GetClients([FromQuery] PaginationParams paginationParams)
         {
-            var clients = repository.GetClients().Select(client => client.AsDto());
+             var clients = repository.GetClients();
 
-            return clients;
+            var totalItems = clients.Count();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
+
+            var pagedClients = clients
+            .Skip((paginationParams.CurrentPage - 1) * paginationParams.PageSize)
+            .Take(paginationParams.PageSize)
+            .Select(client => client.AsDto());
+
+            var response = new
+            {
+                Total = totalItems,
+                PageSize = paginationParams.PageSize,
+                CurrentPage = paginationParams.CurrentPage,
+                TotalPages = totalPages,
+                Clients = pagedClients
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

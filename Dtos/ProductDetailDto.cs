@@ -1,8 +1,9 @@
 using System;
+using Vysion.Entities;
 
-namespace Vysion.Entities
+namespace Vysion.Dtos
 {
-    public record Product
+    public record ProductDetailDto
     {
         public Guid Id { get; init; }
         public string Name { get; init; }

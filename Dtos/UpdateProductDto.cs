@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using Vysion.Entities;
 
 namespace Vysion.Dtos
 {
@@ -7,7 +9,7 @@ namespace Vysion.Dtos
         public string Name { get; init; }
         public string Description { get; init; }
         [Required]
-        public string Category { get; init; }
+        public Guid CategoryId { get; set; }
         [Required]
         public string SKU { get; init; }
         public int StockQuantity { get; init; }
@@ -16,5 +18,6 @@ namespace Vysion.Dtos
         public bool IsActive { get; init; }
         public string ImageUrl { get; init; }
         public decimal Discount { get; init; }
+        public Category Category;
     }
 }
