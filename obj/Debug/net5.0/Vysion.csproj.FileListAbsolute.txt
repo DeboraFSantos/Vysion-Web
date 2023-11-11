@@ -52,3 +52,7 @@ C:\Users\debor\OneDrive\Documentos\Vysion\obj\Debug\net5.0\Vysion.pdb
 C:\Users\debor\OneDrive\Documentos\Vysion\obj\Debug\net5.0\Vysion.genruntimeconfig.cache
 C:\Users\debor\OneDrive\Documentos\Vysion\obj\Debug\net5.0\ref\Vysion.dll
 C:\Users\debor\OneDrive\Documentos\Vysion\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\debor\OneDrive\Documentos\Vysion\bin\Debug\net5.0\EPPlus.dll
+C:\Users\debor\OneDrive\Documentos\Vysion\bin\Debug\net5.0\EPPlus.Interfaces.dll
+C:\Users\debor\OneDrive\Documentos\Vysion\bin\Debug\net5.0\EPPlus.System.Drawing.dll
+C:\Users\debor\OneDrive\Documentos\Vysion\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll

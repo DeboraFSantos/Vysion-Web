@@ -18,6 +18,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using OfficeOpenXml;
 using Vysion.Repositories;
 using Vysion.Settings;
 
@@ -49,6 +50,8 @@ namespace Vysion
             services.AddSingleton<IClientsRepository, ClientsRepository>();
             services.AddSingleton<ISalesRepository, SalesRepository>();
 
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>

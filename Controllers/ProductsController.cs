@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Vysion.Dtos;
 using Vysion.Entities;
 using Vysion.Helpers;
@@ -134,6 +136,51 @@ namespace Vysion.Controllers
             repository.DeleteProduct(id);
 
             return NoContent();
+        }
+
+        [HttpGet("export")]
+        public IActionResult ExportProductsToExcel()
+        {
+            var products = repository.GetProducts();
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Products");
+
+                worksheet.Cells["A1"].Value = "ID";
+                worksheet.Cells["B1"].Value = "Nome";
+                worksheet.Cells["C1"].Value = "Descrição";
+                worksheet.Cells["D1"].Value = "Categoria";
+                worksheet.Cells["E1"].Value = "SKU";
+                worksheet.Cells["F1"].Value = "Preço";
+                worksheet.Cells["G1"].Value = "Ativo";
+                worksheet.Cells["H1"].Value = "URL da Imagem";
+                worksheet.Cells["I1"].Value = "Desconto";
+                worksheet.Cells["J1"].Value = "Data de Criação";
+
+                int row = 2;
+
+                foreach (var product in products)
+                {
+                    worksheet.Cells[$"A{row}"].Value = product.Id;
+                    worksheet.Cells[$"B{row}"].Value = product.Name;
+                    worksheet.Cells[$"C{row}"].Value = product.Description;
+                    worksheet.Cells[$"D{row}"].Value = product.Category;
+                    worksheet.Cells[$"E{row}"].Value = product.SKU;
+                    worksheet.Cells[$"F{row}"].Value = product.Price;
+                    worksheet.Cells[$"G{row}"].Value = product.IsActive;
+                    worksheet.Cells[$"H{row}"].Value = product.ImageUrl;
+                    worksheet.Cells[$"I{row}"].Value = product.Discount;
+                    worksheet.Cells[$"J{row}"].Value = product.CreatedDate;
+
+                    row++;
+                }
+
+                var stream = new MemoryStream(package.GetAsByteArray());
+
+                Response.Headers.Add("Content-Disposition", "attachment; filename=products.xlsx");
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
         }
     }
 }
