@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Vysion.Dtos;
 using Vysion.Entities;
 using Vysion.Helpers;
@@ -131,6 +133,48 @@ namespace Vysion.Controllers
             repository.DeleteSale(id);
 
             return NoContent();
+        }
+
+        [HttpGet("export")]
+        public IActionResult ExportProductsToExcel()
+        {
+            var sales = repository.GetSales();
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Sales");
+
+                worksheet.Cells["A1"].Value = "ID do cliente";
+                worksheet.Cells["B1"].Value = "ID do vendedor";
+                worksheet.Cells["C1"].Value = "ID dos produtos";
+                worksheet.Cells["D1"].Value = "Tipo de pagamento";
+                worksheet.Cells["E1"].Value = "Informações de entrega";
+                worksheet.Cells["F1"].Value = "Número da venda";
+                worksheet.Cells["G1"].Value = "Notas da venda";
+                worksheet.Cells["H1"].Value = "Comissão do vendedor";
+                worksheet.Cells["I1"].Value = "Data de Criação";
+
+                int row = 2;
+
+                foreach (var sale in sales)
+                {
+                    worksheet.Cells[$"A{row}"].Value = sale.ClientId;
+                    worksheet.Cells[$"B{row}"].Value = sale.SellerId;
+                    worksheet.Cells[$"C{row}"].Value = sale.Products;
+                    worksheet.Cells[$"D{row}"].Value = sale.PaymentMethod;
+                    worksheet.Cells[$"E{row}"].Value = sale.DeliveryInformation;
+                    worksheet.Cells[$"F{row}"].Value = sale.SaleNumber;
+                    worksheet.Cells[$"G{row}"].Value = sale.SaleNotes;
+                    worksheet.Cells[$"H{row}"].Value = sale.CommissionForSeller;
+                    worksheet.Cells[$"I{row}"].Value = sale.CreatedDate;
+                    row++;
+                }
+
+                var stream = new MemoryStream(package.GetAsByteArray());
+
+                Response.Headers.Add("Content-Disposition", "attachment; filename=sales.xlsx");
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Vysion.Dtos;
 using Vysion.Entities;
 using Vysion.Helpers;
@@ -116,6 +118,42 @@ namespace Vysion.Controllers
             repository.DeleteClient(id);
 
             return NoContent();
+        }
+
+        [HttpGet("export")]
+        public IActionResult ExportProductsToExcel()
+        {
+            var clients = repository.GetClients();
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Clients");
+
+                worksheet.Cells["A1"].Value = "Nome";
+                worksheet.Cells["B1"].Value = "Email";
+                worksheet.Cells["C1"].Value = "Documento";
+                worksheet.Cells["D1"].Value = "Telefone";
+                worksheet.Cells["E1"].Value = "Endereço";
+                worksheet.Cells["F1"].Value = "Data de Criação";
+
+                int row = 2;
+
+                foreach (var client in clients)
+                {
+                    worksheet.Cells[$"A{row}"].Value = client.Name;
+                    worksheet.Cells[$"B{row}"].Value = client.Email;
+                    worksheet.Cells[$"C{row}"].Value = client.Document;
+                    worksheet.Cells[$"D{row}"].Value = client.Phone;
+                    worksheet.Cells[$"E{row}"].Value = client.Address;
+                    worksheet.Cells[$"F{row}"].Value = client.CreatedDate;
+                    row++;
+                }
+
+                var stream = new MemoryStream(package.GetAsByteArray());
+
+                Response.Headers.Add("Content-Disposition", "attachment; filename=clients.xlsx");
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
         }
     }
 }
