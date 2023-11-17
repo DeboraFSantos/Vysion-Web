@@ -26,6 +26,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetProducts([FromQuery] PaginationParams paginationParams)
         {
             var products = repository.GetProducts();
@@ -51,6 +52,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
          public async Task<IActionResult> GetProduct(Guid id)
         {
             var productInfo = await repository.GetProduct(id);
@@ -74,6 +76,7 @@ namespace Vysion.Controllers
 
         // POST /products
         [HttpPost]
+        [Authorize]
         public ActionResult<ProductDto> CreateProduct(CreateProductDto productDto)
         {
             Product product = new()
@@ -97,6 +100,7 @@ namespace Vysion.Controllers
         
         // PUT /products/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductDto productDto)
         {
             var existingProduct = await repository.GetProduct(id);
@@ -139,6 +143,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("export")]
+        [Authorize]
         public IActionResult ExportProductsToExcel()
         {
             var products = repository.GetProducts();

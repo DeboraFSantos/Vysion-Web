@@ -23,6 +23,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetCategories([FromQuery] PaginationParams paginationParams)
         {
              var categories = repository.GetCategories();
@@ -48,6 +49,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public ActionResult<CategoryDto> GetCategory(Guid id)
         {
             var category = repository.GetCategory(id);
@@ -62,6 +64,7 @@ namespace Vysion.Controllers
 
         // POST /categories
         [HttpPost]
+        [Authorize]
         public ActionResult<CategoryDto> CreateCategory(CreateCategoryDto categoryDto)
         {
             Category category = new()
@@ -81,6 +84,7 @@ namespace Vysion.Controllers
         
         // PUT /categories/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public ActionResult UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
         {
             var existingCategory = repository.GetCategory(id);
@@ -103,6 +107,7 @@ namespace Vysion.Controllers
 
         // Deleete /categories/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult DeleteCategory(Guid id){
 
             var existingCategory = repository.GetCategory(id);

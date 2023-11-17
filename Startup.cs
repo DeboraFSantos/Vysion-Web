@@ -85,6 +85,14 @@ namespace Vysion
                     policy.RequireClaim("role", "user");
                 });
             });
+
+             services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:5173")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,6 +111,8 @@ namespace Vysion
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseEndpoints(endpoints =>
             {

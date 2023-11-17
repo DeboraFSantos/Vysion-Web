@@ -23,6 +23,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetUsers([FromQuery] PaginationParams paginationParams)
         {
              var users = repository.GetUsers();
@@ -48,6 +49,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public ActionResult<UserDto> GetUser(Guid id)
         {
             var user = repository.GetUser(id);
@@ -62,6 +64,7 @@ namespace Vysion.Controllers
 
         // POST /users
         [HttpPost]
+        [Authorize]
         public ActionResult<UserDto> CreateUser(CreateUserDto userDto)
         {
             User user = new()
@@ -82,6 +85,7 @@ namespace Vysion.Controllers
         
         // PUT /users/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public ActionResult UpdateUser(Guid id, UpdateUserDto userDto)
         {
             var existingUser = repository.GetUser(id);
@@ -105,6 +109,7 @@ namespace Vysion.Controllers
 
         // Deleete /users/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult DeleteUser(Guid id){
 
             var existingUser = repository.GetUser(id);

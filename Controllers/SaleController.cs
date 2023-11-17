@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using OfficeOpenXml;
 using Vysion.Dtos;
 using Vysion.Entities;
@@ -24,6 +25,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetSales([FromQuery] PaginationParams paginationParams)
         {
             var sales = repository.GetSales();
@@ -49,6 +51,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetSale(Guid id)
         {
             var saleInfo = await repository.GetSale(id);
@@ -74,6 +77,7 @@ namespace Vysion.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateSale(CreateSaleDto saleDto)
         {
             Sale sale = new Sale
@@ -96,6 +100,7 @@ namespace Vysion.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateSale(Guid id, UpdateSaleDto saleDto)
         {
             var existingSale = await repository.GetSale(id); // Use await para esperar a conclusão da tarefa
@@ -121,6 +126,7 @@ namespace Vysion.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteSale(Guid id)
         {
             var existingSale = repository.GetSale(id);
@@ -136,6 +142,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("export")]
+        [Authorize]
         public IActionResult ExportProductsToExcel()
         {
             var sales = repository.GetSales();

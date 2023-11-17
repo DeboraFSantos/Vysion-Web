@@ -25,6 +25,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetClients([FromQuery] PaginationParams paginationParams)
         {
              var clients = repository.GetClients();
@@ -50,6 +51,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public ActionResult<ClientDto> GetClient(Guid id)
         {
             var client = repository.GetClient(id);
@@ -64,6 +66,7 @@ namespace Vysion.Controllers
 
         // POST /clients
         [HttpPost]
+        [Authorize]
         public ActionResult<ClientDto> CreateClient(CreateClientDto clientDto)
         {
             Client client = new()
@@ -84,6 +87,7 @@ namespace Vysion.Controllers
         
         // PUT /clients/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public ActionResult UpdateClient(Guid id, UpdateClientDto clientDto)
         {
             var existingClient = repository.GetClient(id);
@@ -107,6 +111,7 @@ namespace Vysion.Controllers
 
         // Deleete /clients/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult DeleteCleint(Guid id){
 
             var existingClient = repository.GetClient(id);
@@ -121,6 +126,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("export")]
+        [Authorize]
         public IActionResult ExportProductsToExcel()
         {
             var clients = repository.GetClients();
