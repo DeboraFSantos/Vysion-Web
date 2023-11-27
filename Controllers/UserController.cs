@@ -28,6 +28,8 @@ namespace Vysion.Controllers
         {
              var users = repository.GetUsers();
 
+            users = users.OrderByDescending(p => p.CreatedDate);
+
             var totalItems = users.Count();
             var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
 
@@ -121,6 +123,19 @@ namespace Vysion.Controllers
             repository.DeleteUser(id);
 
             return NoContent();
+        }
+
+        [HttpGet("email")]
+        public ActionResult<UserDto> GetUserByEmail([FromQuery] string email)
+        {
+            var user = repository.GetUsers().FirstOrDefault(u => u.Email == email);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return user.AsDto();
         }
     }
 }

@@ -49,6 +49,7 @@ namespace Vysion
             services.AddSingleton<ICategoriesRepository, CategoriesRepository>();
             services.AddSingleton<IClientsRepository, ClientsRepository>();
             services.AddSingleton<ISalesRepository, SalesRepository>();
+            services.AddSingleton<IPaymentMethodsRepository, PaymentMethodsRepository>();
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             

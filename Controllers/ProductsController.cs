@@ -27,17 +27,29 @@ namespace Vysion.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetProducts([FromQuery] PaginationParams paginationParams)
+        public IActionResult GetProducts([FromQuery] PaginationParams paginationParams, string sku = null, string category = null, string name = null)
         {
             var products = repository.GetProducts();
+
+            if (!string.IsNullOrWhiteSpace(sku))
+            {
+                products = products.Where(p => p.SKU.Contains(sku));
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(name.ToLower()));
+            }
+
+            products = products.OrderByDescending(p => p.CreatedDate);
 
             var totalItems = products.Count();
             var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
 
             var pagedProducts = products
-            .Skip((paginationParams.CurrentPage - 1) * paginationParams.PageSize)
-            .Take(paginationParams.PageSize)
-            .Select(product => product.AsProductDetailDto());
+                .Skip((paginationParams.CurrentPage - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .Select(product => product.AsProductDetailDto());
 
             var response = new
             {
@@ -159,9 +171,7 @@ namespace Vysion.Controllers
                 worksheet.Cells["E1"].Value = "SKU";
                 worksheet.Cells["F1"].Value = "Preço";
                 worksheet.Cells["G1"].Value = "Ativo";
-                worksheet.Cells["H1"].Value = "URL da Imagem";
-                worksheet.Cells["I1"].Value = "Desconto";
-                worksheet.Cells["J1"].Value = "Data de Criação";
+                worksheet.Cells["H1"].Value = "Data de Criação";
 
                 int row = 2;
 
@@ -174,9 +184,7 @@ namespace Vysion.Controllers
                     worksheet.Cells[$"E{row}"].Value = product.SKU;
                     worksheet.Cells[$"F{row}"].Value = product.Price;
                     worksheet.Cells[$"G{row}"].Value = product.IsActive;
-                    worksheet.Cells[$"H{row}"].Value = product.ImageUrl;
-                    worksheet.Cells[$"I{row}"].Value = product.Discount;
-                    worksheet.Cells[$"J{row}"].Value = product.CreatedDate;
+                    worksheet.Cells[$"H{row}"].Value = product.CreatedDate;
 
                     row++;
                 }

@@ -8,6 +8,8 @@ namespace Vysion.Repositories
     public interface ISalesRepository
     {
         Task<Sale> GetSale(Guid id);
+
+        Task<List<Product>> GetProductInfos(List<Guid> productIds);
         IEnumerable<Sale> GetSales();
 
         void CreateSale(Sale sale);

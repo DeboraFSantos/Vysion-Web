@@ -16,9 +16,11 @@ namespace Vysion.Entities
         public string SaleNumber { get; set; }
         public string SaleNotes { get; set; }
         public decimal CommissionForSeller { get; set; }
+        public decimal CommissionForSellerValue { get; set; }
         public DateTimeOffset CreatedDate { get; init; }
         public Client ClientInfo { get; internal set; }
         public User SellerInfo { get; internal set; }
         public List<Product> ProductsInfos { get; internal set; }
+        public Dictionary<Guid, int> ProductQuantity { get; set; }
     }
 }

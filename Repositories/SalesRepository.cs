@@ -88,7 +88,7 @@ namespace Vysion.Repositories
             {
                 sale.ClientInfo = await GetClientInfo(sale.ClientId);
                 sale.SellerInfo = await GetUserInfo(sale.SellerId);
-                sale.TotalSale = await CalculateTotalSale(sale.Products);
+                sale.TotalSale = sale.TotalSale;
                 sale.ProductsInfos = await GetProductInfos(sale.Products);
             }
 
@@ -104,7 +104,7 @@ namespace Vysion.Repositories
                 sale.ClientInfo = GetClientInfo(sale.ClientId).Result;
                 sale.SellerInfo = GetUserInfo(sale.SellerId).Result;
                 sale.ProductsInfos = GetProductInfos(sale.Products).Result;
-                sale.TotalSale = CalculateTotalSale(sale.Products).Result;
+                sale.TotalSale = sale.TotalSale;
             }
 
             return sales;

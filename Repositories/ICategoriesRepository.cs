@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Vysion.Entities;
 
 namespace Vysion.Repositories
 {
     public interface ICategoriesRepository
     {
-        Category GetCategory(Guid id);
+        Task<Category> GetCategory(Guid id);
         IEnumerable<Category> GetCategories();
 
         void CreateCategory(Category category);

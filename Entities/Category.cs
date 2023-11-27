@@ -10,5 +10,10 @@ namespace Vysion.Entities
         public bool IsActive { get; init; }
         public string Slug { get; init; }
         public DateTimeOffset CreatedDate { get; init; }
+
+        internal string ToLower()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

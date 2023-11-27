@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Vysion.Entities;
 
 namespace Vysion.Repositories
 {
     public interface IClientsRepository
     {
-        Client GetClient(Guid id);
+        Task<Client> GetClient(Guid id);
         IEnumerable<Client> GetClients();
 
         void CreateClient(Client client);

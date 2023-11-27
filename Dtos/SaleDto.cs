@@ -17,6 +17,7 @@ namespace Vysion.Dtos
         public string SaleNumber { get; set; }
         public string SaleNotes { get; set; }
         public decimal CommissionForSeller { get; set; }
+        public decimal CommissionForSellerValue { get; set; }
         public DateTimeOffset CreatedDate { get; init; }
         public Client ClientInfo; 
         public User SellerInfo;

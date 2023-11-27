@@ -13,7 +13,9 @@ namespace Vysion.Dtos
         public string DeliveryInformation { get; set; }
         public string SaleNumber { get; set; }
         public string SaleNotes { get; set; }
+        public decimal TotalSale { get; set; }
         public decimal CommissionForSeller { get; set; }
+        public Dictionary<Guid, int> ProductQuantity { get; set; }
         
     }
 }

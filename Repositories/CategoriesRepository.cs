@@ -32,10 +32,12 @@ namespace Vysion.Repositories
             categoriesCollection.DeleteOne(filter);
         }
 
-        public Category GetCategory(Guid id)
+        public async Task<Category> GetCategory(Guid id)
         {
-            var filter = filterBuilder.Eq(category => category.Id, id);
-            return categoriesCollection.Find(filter).SingleOrDefault();
+            var filter = filterBuilder.Eq(product => product.Id, id);
+            var category = await categoriesCollection.Find(filter).SingleOrDefaultAsync();
+
+            return category;
         }
 
         public IEnumerable<Category> GetCategories()

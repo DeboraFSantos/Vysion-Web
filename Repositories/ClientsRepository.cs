@@ -32,12 +32,13 @@ namespace Vysion.Repositories
             clientsCollection.DeleteOne(filter);
         }
 
-        public Client GetClient(Guid id)
+        public async Task<Client> GetClient(Guid id)
         {
-            var filter = filterBuilder.Eq(client => client.Id, id);
-            return clientsCollection.Find(filter).SingleOrDefault();
-        }
+            var filter = filterBuilder.Eq(product => product.Id, id);
+            var client = await clientsCollection.Find(filter).SingleOrDefaultAsync();
 
+            return client;
+        }
         public IEnumerable<Client> GetClients()
         {
             return clientsCollection.Find(new BsonDocument()).ToList();

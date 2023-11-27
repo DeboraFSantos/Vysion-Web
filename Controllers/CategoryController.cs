@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,9 @@ namespace Vysion.Controllers
         [Authorize]
         public IActionResult GetCategories([FromQuery] PaginationParams paginationParams)
         {
-             var categories = repository.GetCategories();
+            var categories = repository.GetCategories();
+
+            categories = categories.OrderByDescending(p => p.CreatedDate);
 
             var totalItems = categories.Count();
             var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
@@ -50,16 +53,21 @@ namespace Vysion.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public ActionResult<CategoryDto> GetCategory(Guid id)
+         public async Task<IActionResult> GetCategory(Guid id)
         {
-            var category = repository.GetCategory(id);
+            var categoryInfo = await repository.GetCategory(id);
 
-            if(category is null)
+            Category category = new Category
             {
-                return NotFound();
-            }
+                Id = categoryInfo.Id,
+                Name = categoryInfo.Name,
+                Description = categoryInfo.Description,
+                IsActive = categoryInfo.IsActive,
+                Slug = categoryInfo.Slug,
+                CreatedDate = categoryInfo.CreatedDate,
+            };
 
-            return category.AsDto();
+             return Ok(category);
         }
 
         // POST /categories
@@ -85,19 +93,21 @@ namespace Vysion.Controllers
         // PUT /categories/{id}
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
+        public async Task<ActionResult> UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
         {
-            var existingCategory = repository.GetCategory(id);
+            var existingClient = await repository.GetCategory(id);
 
-            if(existingCategory is null){
+            if (existingClient is null)
+            {
                 return NotFound();
             }
 
-            Category updatedCategory = existingCategory with {
+            Category updatedCategory = existingClient with
+            {
                 Name = categoryDto.Name,
                 Description = categoryDto.Description,
                 IsActive = categoryDto.IsActive,
-                Slug = categoryDto.Slug,
+                Slug = categoryDto.Slug
             };
 
             repository.UpdateCategory(updatedCategory);

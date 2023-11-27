@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,9 @@ namespace Vysion.Controllers
         [Authorize]
         public IActionResult GetClients([FromQuery] PaginationParams paginationParams)
         {
-             var clients = repository.GetClients();
+            var clients = repository.GetClients();
+
+            clients = clients.OrderByDescending(p => p.CreatedDate);
 
             var totalItems = clients.Count();
             var totalPages = (int)Math.Ceiling(totalItems / (double)paginationParams.PageSize);
@@ -52,16 +55,22 @@ namespace Vysion.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public ActionResult<ClientDto> GetClient(Guid id)
+         public async Task<IActionResult> GetClient(Guid id)
         {
-            var client = repository.GetClient(id);
+            var clientInfo = await repository.GetClient(id);
 
-            if(client is null)
+            Client client = new Client
             {
-                return NotFound();
-            }
+                Id = clientInfo.Id,
+                Name = clientInfo.Name,
+                Email = clientInfo.Email,
+                Document = clientInfo.Document,
+                Phone = clientInfo.Phone,
+                Address = clientInfo.Address,
+                CreatedDate = clientInfo.CreatedDate,
+            };
 
-            return client.AsDto();
+             return Ok(client);
         }
 
         // POST /clients
@@ -88,15 +97,17 @@ namespace Vysion.Controllers
         // PUT /clients/{id}
         [HttpPut("{id}")]
         [Authorize]
-        public ActionResult UpdateClient(Guid id, UpdateClientDto clientDto)
+        public async Task<ActionResult> UpdateClient(Guid id, UpdateClientDto clientDto)
         {
-            var existingClient = repository.GetClient(id);
+            var existingClient = await repository.GetClient(id);
 
-            if(existingClient is null){
+            if (existingClient is null)
+            {
                 return NotFound();
             }
 
-            Client updatedClient = existingClient with {
+            Client updatedClient = existingClient with
+            {
                 Name = clientDto.Name,
                 Email = clientDto.Email,
                 Document = clientDto.Document,

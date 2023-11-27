@@ -64,6 +64,16 @@ namespace Vysion
             };
         }
 
+        public static PaymentMethodDto AsDto(this PaymentMethod paymentMethodDto)
+        {
+            return new PaymentMethodDto
+            {
+                Id = paymentMethodDto.Id,
+                Name = paymentMethodDto.Name,
+                CreatedDate = paymentMethodDto.CreatedDate
+            };
+        }
+
         public static SaleDto AsDto(this Sale sale)
         {
             return new SaleDto
@@ -77,6 +87,7 @@ namespace Vysion
                 DeliveryInformation = sale.DeliveryInformation,
                 SaleNotes = sale.SaleNotes,
                 CommissionForSeller = sale.CommissionForSeller,
+                CommissionForSellerValue = sale.CommissionForSellerValue,
                 CreatedDate = sale.CreatedDate
             };
         }
