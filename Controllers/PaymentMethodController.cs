@@ -26,6 +26,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetPaymentMethods([FromQuery] PaginationParams paginationParams)
         {
             var paymentMethods = repository.GetPaymentMethods();
@@ -53,6 +54,7 @@ namespace Vysion.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
          public async Task<IActionResult> GetPaymentMethod(Guid id)
         {
             var paymentMethodInfo = await repository.GetPaymentMethod(id);
@@ -69,6 +71,7 @@ namespace Vysion.Controllers
 
         // POST /paymentMethod
         [HttpPost]
+        [Authorize]
         public ActionResult<PaymentMethodDto> CreatePaymentMethod(CreatePaymentMethodDto paymentMethodDto)
         {
             PaymentMethod paymentMethod = new()
@@ -85,6 +88,7 @@ namespace Vysion.Controllers
         
         // PUT /paymentMethods/{id}
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdatePaymentMethod(Guid id, UpdatePaymentMethodDto paymentMethodDto)
         {
             var existingPaymentMethod = await repository.GetPaymentMethod(id);
@@ -106,6 +110,7 @@ namespace Vysion.Controllers
 
         // Deleete /paymentMethods/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult DeletePaymentMethod(Guid id){
 
             var existingPaymentMethod = repository.GetPaymentMethod(id);

@@ -66,7 +66,6 @@ namespace Vysion.Controllers
 
         // POST /users
         [HttpPost]
-        [Authorize]
         public ActionResult<UserDto> CreateUser(CreateUserDto userDto)
         {
             User user = new()

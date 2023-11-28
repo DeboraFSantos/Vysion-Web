@@ -41,7 +41,7 @@ namespace Vysion
              
             services.AddSingleton<IMongoClient>(serviceProvider => {
                 var settings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
-                return new MongoClient(settings.ConenctionString);
+                return new MongoClient(settings.ConnectionString);
             });
 
             services.AddSingleton<IProductsRepository, ProductsRepository>();
@@ -99,12 +99,11 @@ namespace Vysion
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vysion v1"));
-            }
+           
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vysion v1"));
+            
 
             app.UseHttpsRedirection();
 
