@@ -93,6 +93,11 @@ namespace Vysion
                     builder => builder.WithOrigins("http://localhost:5173")
                                     .AllowAnyHeader()
                                     .AllowAnyMethod());
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder
+                        .WithOrigins("https://vysion-web-front.vercel.app")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
             });
         }
 
